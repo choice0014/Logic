@@ -153,12 +153,13 @@ function execute(words) {
   if (command === 'list') return { parts: circuit.parts, links: circuit.links };
 
   if (command === 'eval') {
+    const evaluate = LogicCore.createEvaluator(circuit);
     const outputs = Object.fromEntries(circuit.parts
       .filter(part => part.type === 'output')
-      .map(part => [part.id, LogicCore.evaluate(circuit, part.id)]));
+      .map(part => [part.id, evaluate(part.id)]));
     const gateValues = Object.fromEntries(circuit.parts
       .filter(part => gates.has(part.type))
-      .map(part => [part.id, LogicCore.evaluate(circuit, part.id)]));
+      .map(part => [part.id, evaluate(part.id)]));
     return { outputs, gates: gateValues };
   }
 
@@ -170,9 +171,10 @@ function execute(words) {
         part.id,
         row >> (inputs.length - index - 1) & 1
       ]));
+      const evaluate = LogicCore.createEvaluator(circuit, values);
       const outputs = Object.fromEntries(circuit.parts
         .filter(part => part.type === 'output')
-        .map(part => [part.id, LogicCore.evaluate(circuit, part.id, values)]));
+        .map(part => [part.id, evaluate(part.id)]));
       return { ...values, ...outputs };
     });
     return { rows };

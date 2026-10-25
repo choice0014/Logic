@@ -27,6 +27,9 @@ Windows/macOS 코드 서명 인증서는 설정하지 않았습니다. 따라서
 
 오브젝트를 클릭해 선택한 뒤 `Delete`로 삭제하고 `Ctrl+C` / `Ctrl+V`로 복사·붙여넣기.
 메모는 상단 제목 부분을 드래그해 이동하고, 본문에 입력.
+`Ctrl+Z` / `Ctrl+Y`로 회로 편집을 실행 취소/다시 실행합니다. `Ctrl+S`는 처음 저장할 때 파일을 선택하고, 이후에는 현재 파일에 저장합니다. 열기/저장 버튼으로 JSON 회로 파일을 불러오거나 저장할 수도 있습니다. 방향키는 선택된 부품을 한 타일 이동하고, 선택이 없으면 캔버스를 이동합니다. 메모 편집 중에는 텍스트 편집기 단축키를 유지합니다.
+
+상단의 **열기** / **저장** 버튼으로 JSON 회로 파일을 불러오거나 저장할 수 있습니다.
 
 ## CLI
 
@@ -52,5 +55,7 @@ node logic-cli.cjs --json eval
 - `styles.css`: 화면 스타일과 테마
 - `src/renderer.js`: 캔버스, 입력 처리, 오브젝트 표시
 - `src/circuit-core.js`: CLI와 UI가 공유하는 회로 평가기
+- `preload.cjs`: 회로 파일 대화상자 IPC의 최소 API
 - `logic-cli.cjs`: 자동화용 명령줄 인터페이스
+- `start.cjs`: OS별 Electron 개발 실행 옵션
 - `main.cjs`: Electron 창과 앱 생명주기

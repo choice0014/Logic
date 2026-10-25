@@ -5,7 +5,7 @@
   "description": "간단한 논리 회로 시뮬레이터",
   "main": "main.cjs",
   "scripts": {
-    "start": "electron .",
+    "start": "node start.cjs",
     "cli": "node logic-cli.cjs",
     "dist": "electron-builder",
     "dist:linux": "electron-builder --linux AppImage deb",
@@ -16,7 +16,7 @@
     "appId": "com.logic.desktop",
     "productName": "logic",
     "directories": { "output": "dist" },
-    "files": ["index.html", "styles.css", "main.cjs", "logic-cli.cjs", "src/**/*", "package.json"],
+    "files": ["index.html", "styles.css", "main.cjs", "preload.cjs", "logic-cli.cjs", "src/**/*", "package.json"],
     "linux": { "target": ["AppImage", "deb"], "category": "Education" },
     "win": { "target": ["nsis", "zip"] },
     "mac": { "target": ["dmg", "zip"], "category": "public.app-category.education" }

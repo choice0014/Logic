@@ -6,33 +6,62 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function createCore() {
   const gateTypes = Object.freeze(['AND', 'OR', 'NOT', 'XOR']);
 
-  // Evaluate recursively and fail on cycles instead of letting a loop hang.
-  function evaluate(circuit, id, inputValues = {}, path = []) {
-    const part = circuit.parts.find(candidate => candidate.id === id);
-    if (!part) throw new Error(`오브젝트를 찾을 수 없습니다: ${id}`);
-    if (part.type === 'input') return inputValues[id] ?? part.value ?? 0;
-    if (path.includes(id)) throw new Error(`순환 연결이 있습니다: ${[...path, id].join(' → ')}`);
+  // Build indexes once per signal snapshot, then memoize each node's result.
+  // Create a fresh evaluator whenever topology or input values change.
+  function createEvaluator(circuit, overrides = {}) {
+    const partsById = new Map(circuit.parts.map(part => [part.id, part]));
+    const linksByInput = new Map();
+    circuit.links.forEach(link => {
+      const target = partsById.get(link.to);
+      const port = link.input !== undefined
+        ? link.input.toUpperCase()
+        : target?.type === 'lamp' || target?.type === 'output'
+          ? 'IN'
+          : link.index === 0 ? 'A' : 'B';
+      const key = `${link.to}:${port}`;
+      if (!linksByInput.has(key)) linksByInput.set(key, link);
+    });
 
-    // The renderer stores numeric pin indexes; the CLI stores named input ports.
-    const readPort = (name, index) => {
-      const link = circuit.links.find(candidate => candidate.to === id && (
-        candidate.input !== undefined
-          ? candidate.input.toUpperCase() === name.toUpperCase()
-          : candidate.index === index
-      ));
-      return link ? evaluate(circuit, link.from, inputValues, [...path, id]) : 0;
-    };
+    const values = new Map();
+    const active = new Set();
+    function value(id) {
+      if (values.has(id)) return values.get(id);
+      const part = partsById.get(id);
+      if (!part) throw new Error(`오브젝트를 찾을 수 없습니다: ${id}`);
+      if (part.type === 'input') return overrides[id] ?? part.value ?? 0;
+      if (active.has(id)) throw new Error(`순환 연결이 있습니다: ${id}`);
 
-    if (part.type === 'lamp' || part.type === 'output') return readPort('in', 0);
-    const a = readPort('A', 0), b = readPort('B', 1);
-    switch (part.type) {
-      case 'AND': return +Boolean(a && b);
-      case 'OR': return +Boolean(a || b);
-      case 'XOR': return +(Boolean(a) !== Boolean(b));
-      case 'NOT': return +!a;
-      default: throw new Error(`알 수 없는 게이트: ${part.type}`);
+      active.add(id);
+      try {
+        const readPort = name => {
+          const link = linksByInput.get(`${id}:${name}`);
+          return link ? value(link.from) : 0;
+        };
+        let result;
+        if (part.type === 'lamp' || part.type === 'output') {
+          result = readPort('IN');
+        } else {
+          const a = readPort('A'), b = readPort('B');
+          switch (part.type) {
+            case 'AND': result = +Boolean(a && b); break;
+            case 'OR': result = +Boolean(a || b); break;
+            case 'XOR': result = +(Boolean(a) !== Boolean(b)); break;
+            case 'NOT': result = +!a; break;
+            default: throw new Error(`알 수 없는 게이트: ${part.type}`);
+          }
+        }
+        values.set(id, result);
+        return result;
+      } finally {
+        active.delete(id);
+      }
     }
+    return value;
   }
 
-  return Object.freeze({ gateTypes, evaluate });
+  function evaluate(circuit, id, overrides = {}) {
+    return createEvaluator(circuit, overrides)(id);
+  }
+
+  return Object.freeze({ gateTypes, createEvaluator, evaluate });
 });
