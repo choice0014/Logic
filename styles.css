@@ -1,0 +1,769 @@
+/* Base and app layout */
+*
+{
+  box-sizing:border-box
+}
+:root
+{
+  font:15px/1.45 system-ui,sans-serif;
+  color:#e9efff;
+  background:#10141f;
+  color-scheme:dark
+}
+body
+{
+  margin:0;
+  height:100vh;
+  overflow:hidden;
+  background:radial-gradient(ellipse at 50% -30%,#26304a,#10141f 65%)
+}
+header
+{
+  height:58px;
+  padding:0 20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid #ffffff12
+}
+.brand
+{
+  display:flex;
+  align-items:center;
+  gap:12px
+}
+.logo
+{
+  display:grid;
+  place-items:center;
+  width:38px;
+  height:38px;
+  background:#7c6cff;
+  border-radius:12px;
+  font-weight:900;
+  font-size:20px
+}
+.brand strong
+{
+  font-size:17px;
+  letter-spacing:.02em
+}
+.brand small
+{
+  display:block;
+  color:#828da5;
+  font-size:12px
+}
+button
+{
+  font:inherit;
+  color:inherit;
+  cursor:pointer
+}
+.reset
+{
+  padding:9px 14px;
+  border:1px solid #ffffff20;
+  background:#ffffff08;
+  border-radius:9px;
+  color:#b6c0d6
+}
+.reset:hover
+{
+  background:#ffffff14
+}
+main
+{
+  height:calc(100vh - 58px);
+  display:flex;
+  flex-direction:column
+}
+.intro
+{
+  display:none
+}
+.layout
+{
+  flex:1;
+  min-height:0;
+  display:flex;
+  flex-direction:row
+}
+.panel
+{
+  width:196px;
+  flex:none;
+  padding:14px 12px;
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+  gap:7px;
+  border-right:1px solid #ffffff13;
+  background:#181e2b;
+  order:0;
+  overflow:auto
+}
+.panel h2
+{
+  display:block;
+  margin:2px 4px 8px;
+  color:#8e9ab4;
+  font-size:11px;
+  letter-spacing:.12em;
+  text-transform:uppercase
+}
+.tool
+{
+  width:100%;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:9px;
+  border:1px solid #ffffff10;
+  background:#ffffff05;
+  border-radius:9px;
+  text-align:left
+}
+.tool:hover
+{
+  border-color:#796cff80;
+  background:#796cff12
+}
+.icon
+{
+  width:32px;
+  height:30px;
+  flex:none;
+  display:grid;
+  place-items:center;
+  background:#252c3c;
+  border-radius:6px;
+  color:#a8b4d0;
+  font-size:11px;
+  font-weight:800
+}
+.tool b
+{
+  font-size:13px
+}
+.tool small
+{
+  display:block;
+  color:#7f8aa2;
+  font-size:11px
+}
+.panel .rule
+{
+  height:1px;
+  background:#ffffff12;
+  margin:12px 0
+}
+.help
+{
+  display:block;
+  font-size:12px;
+  line-height:1.7;
+  color:#8994ac
+}
+.help b
+{
+  color:#d1d9ed;
+  font-weight:600
+}
+.tile-control
+{
+  padding:4px;
+  color:#9aa6be;
+  font-size:12px
+}
+.tile-control input
+{
+  width:100%;
+  accent-color:#8a7cff
+}
+/* Infinite canvas */
+.board-wrap
+{
+  position:relative;
+  flex:1;
+  min-width:0;
+  min-height:0;
+  background-color:#151b27
+}
+.board
+{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  touch-action:none;
+  background-image:radial-gradient(#ffffff22 1px,transparent 1px);
+  background-size:24px 24px;
+  background-position:center
+}
+.world
+{
+  position:absolute;
+  left:0;
+  top:0;
+  width:100000px;
+  height:100000px;
+  transform-origin:0 0
+}
+.wire-layer
+{
+  position:absolute;
+  left:0;
+  top:0;
+  width:100000px;
+  height:100000px;
+  pointer-events:none;
+  overflow:visible
+}
+.wire
+{
+  fill:none;
+  stroke:#65718a;
+  stroke-width:2.5;
+  stroke-linecap:round
+}
+.wire.on
+{
+  stroke:#54dfb3;
+  filter:drop-shadow(0 0 4px #54dfb388)
+}
+.wire.preview
+{
+  stroke:#9a8cff;
+  stroke-dasharray:5 5
+}
+.node
+{
+  position:absolute;
+  z-index:2;
+  user-select:none
+}
+/* Circuit objects */
+.source
+{
+  width:128px;
+  height:66px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 10px 0 14px;
+  border:1px solid #3a465b;
+  background:#202838;
+  border-radius:11px;
+  cursor:grab
+}
+.source:active,.gate:active
+{
+  cursor:grabbing
+}
+.source .name
+{
+  font-size:14px;
+  font-weight:800
+}
+.toggle
+{
+  border:0;
+  border-radius:6px;
+  background:#30394b;
+  padding:5px 9px;
+  font-weight:800;
+  color:#9ba8c1
+}
+.toggle.on
+{
+  color:#10191e;
+  background:#54dfb3
+}
+.gate
+{
+  width:136px;
+  height:94px;
+  border:1px solid #3b465c;
+  background:#202838;
+  border-radius:11px;
+  cursor:grab;
+  box-shadow:0 8px 24px #0002
+}
+.gate.selected
+{
+  border-color:#9a8cff;
+  box-shadow:0 0 0 2px #9a8cff30
+}
+.gate-head
+{
+  height:37px;
+  padding:8px 12px;
+  border-bottom:1px solid #ffffff0d;
+  display:flex;
+  justify-content:space-between;
+  align-items:center
+}
+.gate-head strong
+{
+  font-size:13px
+}
+.gate-head button
+{
+  border:0;
+  background:none;
+  color:#7f8aa2;
+  padding:0 3px
+}
+.gate-head button:hover
+{
+  color:#ff8d9a
+}
+.gate-body
+{
+  height:55px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:0
+}
+.pins
+{
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-evenly
+}
+.pin
+{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  color:#8190aa;
+  font-size:10px
+}
+.pin.in
+{
+  margin-left:-5px
+}
+.pin.out
+{
+  margin-right:-5px
+}
+.dot
+{
+  position:relative;
+  width:16px;
+  height:16px;
+  border:3px solid #8794ad;
+  background:#202838;
+  border-radius:50%;
+  cursor:crosshair;
+  touch-action:none
+}
+.dot:before
+{
+  content:"";
+  position:absolute;
+  inset:-11px;
+  border-radius:50%
+}
+.dot:hover
+{
+  border-color:#b2aaff;
+  background:#9a8cff
+}
+.dot.hot
+{
+  border-color:#54dfb3;
+  background:#54dfb3
+}
+.symbol
+{
+  font-size:18px;
+  font-weight:800;
+  color:#aaa0ff
+}
+.lamp
+{
+  width:105px;
+  height:70px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:12px;
+  border:1px solid #3a465b;
+  background:#202838;
+  border-radius:11px
+}
+.bulb
+{
+  width:22px;
+  height:22px;
+  border-radius:50%;
+  background:#394255;
+  border:2px solid #65718a
+}
+.bulb.on
+{
+  background:#54dfb3;
+  border-color:#a1ffe2;
+  box-shadow:0 0 18px #54dfb388
+}
+.lamp b
+{
+  font-size:13px
+}
+.memo
+{
+  width:180px;
+  min-height:100px;
+  padding:12px;
+  background:#f7d976;
+  color:#3d351e;
+  border:0;
+  border-radius:5px;
+  box-shadow:2px 5px 14px #0004;
+  cursor:grab;
+  font:13px/1.4 system-ui,sans-serif;
+  resize:both
+}
+.empty
+{
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-items:center;
+  text-align:center;
+  color:#8793aa;
+  pointer-events:none
+}
+.empty span
+{
+  display:block;
+  font-size:33px;
+  color:#596680;
+  margin-bottom:8px
+}
+.status
+{
+  height:30px;
+  padding:6px 14px;
+  background:#111722;
+  color:#8994ac;
+  font-size:11px
+}
+.status b
+{
+  color:#c6d0e5;
+  font-weight:600
+}
+
+@media(max-width:720px)
+{
+  header
+  {
+    padding:0 12px
+  }
+  .panel
+  {
+    width:144px;
+    padding:10px 7px
+  }
+  .tool
+  {
+    padding:7px
+  }
+  .tool small
+  {
+    display:none
+  }
+  .tool b
+  {
+    font-size:11px
+  }
+  .icon
+  {
+    width:27px;
+    height:27px
+  }
+  .brand small
+  {
+    display:none
+  }
+  .reset
+  {
+    padding:7px 10px
+  }
+}
+:root
+{
+  background:#09090b;
+  color:#ededf0
+}
+body
+{
+  background:#09090b
+}
+header
+{
+  background:#0b0b0e
+}
+.panel
+{
+  background:#111114
+}
+.board-wrap
+{
+  background-color:#0d0d10
+}
+.board
+{
+  background-image:radial-gradient(#ffffff24 1px,transparent 1px)
+}
+.source
+{
+  width:106px;
+  height:54px;
+  padding:0 8px 0 10px;
+  background:#18181d;
+  border-color:#3a3a44;
+  border-radius:9px
+}
+.source .name
+{
+  font-size:12px
+}
+.toggle
+{
+  padding:4px 7px
+}
+.gate
+{
+  width:116px;
+  height:78px;
+  background:#18181d;
+  border-color:#3b3b46;
+  border-radius:9px
+}
+.gate-head
+{
+  height:30px;
+  padding:5px 9px
+}
+.gate-head strong
+{
+  font-size:12px
+}
+.gate-body
+{
+  height:47px
+}
+.pin
+{
+  gap:5px;
+  font-size:9px
+}
+.dot
+{
+  width:12px;
+  height:12px;
+  border-width:2px
+}
+.dot:before
+{
+  inset:-10px
+}
+.symbol
+{
+  font-size:16px
+}
+.lamp
+{
+  width:90px;
+  height:58px;
+  gap:8px;
+  padding:9px;
+  background:#18181d;
+  border-color:#3a3a44
+}
+.bulb
+{
+  width:18px;
+  height:18px
+}
+.lamp b
+{
+  font-size:11px
+}
+.memo
+{
+  width:150px;
+  min-height:82px;
+  padding:9px;
+  font-size:12px
+}
+.status
+{
+  background:#0a0a0c
+}
+.empty[hidden]
+{
+  display:none
+}
+.node.selected
+{
+  outline:2px solid #8e7cff;
+  outline-offset:3px
+}
+.marquee
+{
+  position:absolute;
+  z-index:5;
+  display:none;
+  border:1px solid #9a8cff;
+  background:#9a8cff22;
+  pointer-events:none
+}
+.node-delete
+{
+  position:absolute;
+  z-index:4;
+  right:-9px;
+  top:-9px;
+  width:22px;
+  height:22px;
+  padding:0;
+  border:1px solid #454550;
+  border-radius:50%;
+  background:#25252c;
+  color:#ddd;
+  font-size:16px;
+  line-height:18px;
+  opacity:.9
+}
+.node-delete:hover
+{
+  background:#d8495b;
+  border-color:#ff8490;
+  color:white
+}
+.pin.in
+{
+  margin-left:-5px
+}
+.pin.in .dot
+{
+  order:-1
+}
+.memo-node
+{
+  width:150px;
+  min-height:82px;
+  background:#f7d976;
+  color:#3d351e;
+  border-radius:5px;
+  box-shadow:2px 5px 14px #0004;
+  overflow:visible
+}
+.memo-head
+{
+  padding:4px 9px;
+  background:#e9c85e;
+  color:#594a1e;
+  font-size:10px;
+  cursor:grab;
+  border-radius:5px 5px 0 0
+}
+.memo-node textarea
+{
+  display:block;
+  width:100%;
+  min-height:68px;
+  padding:7px;
+  border:0;
+  outline:0;
+  resize:both;
+  background:#f7d976;
+  color:#3d351e;
+  font:12px/1.4 system-ui,sans-serif
+}
+/* Light theme */
+body.light
+{
+  color-scheme:light;
+  color:#20212a;
+  background:#f7f7fa
+}
+body.light,body.light header
+{
+  background:#f7f7fa;
+  color:#20212a
+}
+body.light header
+{
+  border-color:#00000014
+}
+.light .panel
+{
+  background:#ebecf1;
+  border-color:#00000014
+}
+.light .board-wrap
+{
+  background:#f5f6fa
+}
+.light .board
+{
+  background-image:radial-gradient(#20212a2b 1px,transparent 1px)
+}
+.light .source,.light .gate,.light .lamp
+{
+  background:#fff;
+  border-color:#cdd0db;
+  color:#292b35
+}
+.light .dot
+{
+  background:#fff;
+  border-color:#969aaa
+}
+.light .gate-head
+{
+  border-color:#e7e8ee
+}
+.light .pin,.light .panel h2,.light .tool small,.light .help,.light .tile-control,.light .status
+{
+  color:#666b7a
+}
+.light .tool
+{
+  background:#fff;
+  border-color:#dfe1e8
+}
+.light .icon
+{
+  background:#f0f0f5;
+  color:#666b7a
+}
+.light .status
+{
+  background:#eceef3
+}
+.light .reset
+{
+  color:#404352;
+  border-color:#cdd0db;
+  background:#fff
+}
+.light .gate-head button
+{
+  color:#777
+}
+.light .symbol
+{
+  color:#6958e8
+}
+.light .memo-head
+{
+  background:#e9c85e
+}

@@ -9,26 +9,13 @@ npm start
 
 ## 데스크톱 실행 파일 빌드
 
-빌드 산출물은 저장소에 포함하지 않습니다. 의존성을 설치한 뒤 대상 OS에서 빌드하세요.
-
-```sh
-npm install
-npm run dist:linux  # AppImage, deb
-npm run dist:win    # NSIS 설치 파일, zip
-npm run dist:mac    # dmg, zip
-```
-
-각 OS에서 저장소를 내려받고 해당 OS에서 직접 빌드합니다. Linux용은 Linux에서, Windows용은 Windows에서, macOS용은 macOS에서 실행하세요.
+빌드 산출물은 저장소에 포함하지 않습니다. 저장소를 내려받은 뒤 각 OS에서 의존성을 설치하고 그 OS의 명령을 실행하세요.
 
 ```sh
 git clone https://github.com/choice0014/Logic.git
 cd Logic
 npm install
-```
 
-대상 OS에 맞춰 하나를 실행하면 결과물이 `dist/`에 생성됩니다.
-
-```sh
 npm run dist:linux  # Linux: AppImage, deb
 npm run dist:win    # Windows: NSIS 설치 파일, zip
 npm run dist:mac    # macOS: dmg, zip
@@ -58,3 +45,12 @@ node logic-cli.cjs --json eval
 ```
 
 명령 없이 실행하면 대화형 CLI가 열립니다. `--file PATH`로 회로 파일을 바꿀 수 있습니다.
+
+## 코드 구성
+
+- `index.html`: 앱 화면 구조와 정적 문구
+- `styles.css`: 화면 스타일과 테마
+- `src/renderer.js`: 캔버스, 입력 처리, 오브젝트 표시
+- `src/circuit-core.js`: CLI와 UI가 공유하는 회로 평가기
+- `logic-cli.cjs`: 자동화용 명령줄 인터페이스
+- `main.cjs`: Electron 창과 앱 생명주기

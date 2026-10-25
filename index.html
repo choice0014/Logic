@@ -1,71 +1,92 @@
 <!doctype html>
 <html lang="ko">
-<head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>logic</title>
-  <style>
-    *{box-sizing:border-box} :root{font:15px/1.45 system-ui,sans-serif;color:#e9efff;background:#10141f;color-scheme:dark}
-    body{margin:0;height:100vh;overflow:hidden;background:radial-gradient(ellipse at 50% -30%,#26304a,#10141f 65%)}
-    header{height:58px;padding:0 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffffff12}
-    .brand{display:flex;align-items:center;gap:12px}.logo{display:grid;place-items:center;width:38px;height:38px;background:#7c6cff;border-radius:12px;font-weight:900;font-size:20px}.brand strong{font-size:17px;letter-spacing:.02em}.brand small{display:block;color:#828da5;font-size:12px}
-    button{font:inherit;color:inherit;cursor:pointer}.reset{padding:9px 14px;border:1px solid #ffffff20;background:#ffffff08;border-radius:9px;color:#b6c0d6}.reset:hover{background:#ffffff14}
-    main{height:calc(100vh - 58px);display:flex;flex-direction:column}.intro{display:none}
-    .layout{flex:1;min-height:0;display:flex;flex-direction:row}.panel{width:196px;flex:none;padding:14px 12px;display:flex;flex-direction:column;align-items:stretch;gap:7px;border-right:1px solid #ffffff13;background:#181e2b;order:0;overflow:auto}.panel h2{display:block;margin:2px 4px 8px;color:#8e9ab4;font-size:11px;letter-spacing:.12em;text-transform:uppercase}.tool{width:100%;display:flex;align-items:center;gap:10px;padding:9px;border:1px solid #ffffff10;background:#ffffff05;border-radius:9px;text-align:left}.tool:hover{border-color:#796cff80;background:#796cff12}.icon{width:32px;height:30px;flex:none;display:grid;place-items:center;background:#252c3c;border-radius:6px;color:#a8b4d0;font-size:11px;font-weight:800}.tool b{font-size:13px}.tool small{display:block;color:#7f8aa2;font-size:11px}.panel .rule{height:1px;background:#ffffff12;margin:12px 0}.help{display:block;font-size:12px;line-height:1.7;color:#8994ac}.help b{color:#d1d9ed;font-weight:600}.tile-control{padding:4px;color:#9aa6be;font-size:12px}.tile-control input{width:100%;accent-color:#8a7cff}.board-wrap{position:relative;flex:1;min-width:0;min-height:0;background-color:#151b27}.board{position:absolute;inset:0;overflow:hidden;touch-action:none;background-image:radial-gradient(#ffffff22 1px,transparent 1px);background-size:24px 24px;background-position:center}.world{position:absolute;left:0;top:0;width:100000px;height:100000px;transform-origin:0 0}.wire-layer{position:absolute;left:0;top:0;width:100000px;height:100000px;pointer-events:none;overflow:visible}.wire{fill:none;stroke:#65718a;stroke-width:2.5;stroke-linecap:round}.wire.on{stroke:#54dfb3;filter:drop-shadow(0 0 4px #54dfb388)}.wire.preview{stroke:#9a8cff;stroke-dasharray:5 5}.node{position:absolute;z-index:2;user-select:none}.source{width:128px;height:66px;display:flex;align-items:center;justify-content:space-between;padding:0 10px 0 14px;border:1px solid #3a465b;background:#202838;border-radius:11px;cursor:grab}.source:active,.gate:active{cursor:grabbing}.source .name{font-size:14px;font-weight:800}.toggle{border:0;border-radius:6px;background:#30394b;padding:5px 9px;font-weight:800;color:#9ba8c1}.toggle.on{color:#10191e;background:#54dfb3}.gate{width:136px;height:94px;border:1px solid #3b465c;background:#202838;border-radius:11px;cursor:grab;box-shadow:0 8px 24px #0002}.gate.selected{border-color:#9a8cff;box-shadow:0 0 0 2px #9a8cff30}.gate-head{height:37px;padding:8px 12px;border-bottom:1px solid #ffffff0d;display:flex;justify-content:space-between;align-items:center}.gate-head strong{font-size:13px}.gate-head button{border:0;background:none;color:#7f8aa2;padding:0 3px}.gate-head button:hover{color:#ff8d9a}.gate-body{height:55px;display:flex;justify-content:space-between;align-items:center;padding:0}.pins{height:100%;display:flex;flex-direction:column;justify-content:space-evenly}.pin{display:flex;align-items:center;gap:7px;color:#8190aa;font-size:10px}.pin.in{margin-left:-5px}.pin.out{margin-right:-5px}.dot{position:relative;width:16px;height:16px;border:3px solid #8794ad;background:#202838;border-radius:50%;cursor:crosshair;touch-action:none}.dot:before{content:"";position:absolute;inset:-11px;border-radius:50%}.dot:hover{border-color:#b2aaff;background:#9a8cff}.dot.hot{border-color:#54dfb3;background:#54dfb3}.symbol{font-size:18px;font-weight:800;color:#aaa0ff}.lamp{width:105px;height:70px;display:flex;align-items:center;gap:10px;padding:12px;border:1px solid #3a465b;background:#202838;border-radius:11px}.bulb{width:22px;height:22px;border-radius:50%;background:#394255;border:2px solid #65718a}.bulb.on{background:#54dfb3;border-color:#a1ffe2;box-shadow:0 0 18px #54dfb388}.lamp b{font-size:13px}.memo{width:180px;min-height:100px;padding:12px;background:#f7d976;color:#3d351e;border:0;border-radius:5px;box-shadow:2px 5px 14px #0004;cursor:grab;font:13px/1.4 system-ui,sans-serif;resize:both}.empty{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:#8793aa;pointer-events:none}.empty span{display:block;font-size:33px;color:#596680;margin-bottom:8px}.status{height:30px;padding:6px 14px;background:#111722;color:#8994ac;font-size:11px}.status b{color:#c6d0e5;font-weight:600}
-    @media(max-width:720px){header{padding:0 12px}.panel{width:144px;padding:10px 7px}.tool{padding:7px}.tool small{display:none}.tool b{font-size:11px}.icon{width:27px;height:27px}.brand small{display:none}.reset{padding:7px 10px}}
-    :root{background:#09090b;color:#ededf0}body{background:#09090b}header{background:#0b0b0e}.panel{background:#111114}.board-wrap{background-color:#0d0d10}.board{background-image:radial-gradient(#ffffff24 1px,transparent 1px)}
-    .source{width:106px;height:54px;padding:0 8px 0 10px;background:#18181d;border-color:#3a3a44;border-radius:9px}.source .name{font-size:12px}.toggle{padding:4px 7px}.gate{width:116px;height:78px;background:#18181d;border-color:#3b3b46;border-radius:9px}.gate-head{height:30px;padding:5px 9px}.gate-head strong{font-size:12px}.gate-body{height:47px}.pin{gap:5px;font-size:9px}.dot{width:12px;height:12px;border-width:2px}.dot:before{inset:-10px}.symbol{font-size:16px}.lamp{width:90px;height:58px;gap:8px;padding:9px;background:#18181d;border-color:#3a3a44}.bulb{width:18px;height:18px}.lamp b{font-size:11px}.memo{width:150px;min-height:82px;padding:9px;font-size:12px}.status{background:#0a0a0c}
-    .empty[hidden]{display:none}.node.selected{outline:2px solid #8e7cff;outline-offset:3px}.marquee{position:absolute;z-index:5;display:none;border:1px solid #9a8cff;background:#9a8cff22;pointer-events:none}.node-delete{position:absolute;z-index:4;right:-9px;top:-9px;width:22px;height:22px;padding:0;border:1px solid #454550;border-radius:50%;background:#25252c;color:#ddd;font-size:16px;line-height:18px;opacity:.9}.node-delete:hover{background:#d8495b;border-color:#ff8490;color:white}.pin.in{margin-left:-5px}.pin.in .dot{order:-1}.memo-node{width:150px;min-height:82px;background:#f7d976;color:#3d351e;border-radius:5px;box-shadow:2px 5px 14px #0004;overflow:visible}.memo-head{padding:4px 9px;background:#e9c85e;color:#594a1e;font-size:10px;cursor:grab;border-radius:5px 5px 0 0}.memo-node textarea{display:block;width:100%;min-height:68px;padding:7px;border:0;outline:0;resize:both;background:#f7d976;color:#3d351e;font:12px/1.4 system-ui,sans-serif}
-    body.light{color-scheme:light;color:#20212a;background:#f7f7fa}body.light,body.light header{background:#f7f7fa;color:#20212a}body.light header{border-color:#00000014}.light .panel{background:#ebecf1;border-color:#00000014}.light .board-wrap{background:#f5f6fa}.light .board{background-image:radial-gradient(#20212a2b 1px,transparent 1px)}.light .source,.light .gate,.light .lamp{background:#fff;border-color:#cdd0db;color:#292b35}.light .dot{background:#fff;border-color:#969aaa}.light .gate-head{border-color:#e7e8ee}.light .pin,.light .panel h2,.light .tool small,.light .help,.light .tile-control,.light .status{color:#666b7a}.light .tool{background:#fff;border-color:#dfe1e8}.light .icon{background:#f0f0f5;color:#666b7a}.light .status{background:#eceef3}.light .reset{color:#404352;border-color:#cdd0db;background:#fff}.light .gate-head button{color:#777}.light .symbol{color:#6958e8}.light .memo-head{background:#e9c85e}
-  </style>
-</head>
-<body>
-  <header><div class="brand"><div class="logo">∧</div><div><strong>logic</strong></div></div><div><button class="reset" id="theme">라이트 테마</button> <button class="reset" id="reset">회로 초기화</button></div></header>
-  <main>
-    <div class="layout">
-      <aside class="panel"><h2>부품</h2>
-        <button class="tool" data-add="input"><span class="icon">0 / 1</span><span><b>입력</b><small>신호 스위치</small></span></button>
-        <button class="tool" data-add="AND"><span class="icon">&amp;</span><span><b>AND</b><small>그리고</small></span></button>
-        <button class="tool" data-add="OR"><span class="icon">≥1</span><span><b>OR</b><small>또는</small></span></button>
-        <button class="tool" data-add="NOT"><span class="icon">1</span><span><b>NOT</b><small>반전</small></span></button>
-        <button class="tool" data-add="XOR"><span class="icon">=1</span><span><b>XOR</b><small>배타적 OR</small></span></button>
-        <button class="tool" data-add="lamp"><span class="icon">●</span><span><b>램프</b><small>출력 표시</small></span></button>
-        <button class="tool" data-add="memo"><span class="icon">✎</span><span><b>메모</b><small>주석</small></span></button>
-        <div class="rule"></div><label class="tile-control">타일 크기 <b id="tile-label">24</b>px<input id="tile-size" type="range" min="12" max="64" value="24"></label><div class="help"><b>사용법</b><br>부품을 캔버스로 드래그<br>Shift+클릭/드래그: 다중 선택<br>선택한 부품 드래그: 함께 이동<br>출력에서 오브젝트로 선 연결<br>빈 곳을 드래그해 이동<br>휠로 확대·축소<br>포트 더블클릭으로 연결 해제</div>
-      </aside>
-      <section class="board-wrap" id="viewport"><div class="board" id="board"><div class="marquee" id="marquee"></div><div class="world" id="world"><svg class="wire-layer" id="wires" viewBox="0 0 100000 100000"></svg><div class="empty" id="empty"><div><span>⌁</span>사이드바에서 부품을 꺼내<br>무한 캔버스에 놓아보세요</div></div></div></div></section>
-    </div>
-    <div class="status" id="status" aria-live="polite"><b>준비됨</b> · 부품을 캔버스로 끌어 놓으세요. 출력선을 오브젝트 위에 놓으면 자동 연결됩니다.</div>
-  </main>
-  <script>
-    const board=document.querySelector('#board'), wires=document.querySelector('#wires'), status=document.querySelector('#status');
-    const world=document.querySelector('#world'), viewport=document.querySelector('#viewport');
-    let parts=[], links=[], nextId=0, drag=null, wireDrag=null, wirePoint=null, zoom=1, panX=0, panY=0, tile=24, panDrag=null, selectedIds=new Set(), selectedId=null, selectDrag=null, clipboard=null;
-    const snap=n=>Math.round(n/tile)*tile;
-    function worldPoint(x,y){const r=board.getBoundingClientRect();return{x:(x-r.left-panX)/zoom,y:(y-r.top-panY)/zoom}}
-    function camera(){world.style.transform=`translate(${panX}px,${panY}px) scale(${zoom})`;board.style.backgroundSize=`${tile*zoom}px ${tile*zoom}px`;board.style.backgroundPosition=`${panX% (tile*zoom)}px ${panY% (tile*zoom)}px`}
-    function add(type,x,y){const id=nextId++, p={id,type,x:snap(x),y:snap(y),value:0};parts.push(p);selectedIds=new Set([id]);selectedId=id;draw();return p}
-    function pin(p,side,index=0){return board.querySelector(`[data-pin="${p.id}:${side}:${index}"]`)}
-    function value(p,seen=new Set()){if(!p||seen.has(p.id))return 0;seen.add(p.id);if(p.type==='input')return p.value;const ins=links.filter(l=>l.to===p.id).sort((a,b)=>a.index-b.index).map(l=>value(parts.find(q=>q.id===l.from),new Set(seen)));const a=ins[0]||0,b=ins[1]||0;return p.type==='lamp'?a:p.type==='AND'?+(ins.length===2&&!!a&&!!b):p.type==='OR'?+(!!a||!!b):p.type==='XOR'?+(!!a!==!!b):+!a}
-    function draw(){world.querySelectorAll('.node').forEach(n=>n.remove());document.querySelector('#empty').hidden=parts.length>0;wires.innerHTML='';
-      parts.forEach(p=>{const el=document.createElement('div');el.className='node '+(p.type==='input'?'source':p.type==='lamp'?'lamp':p.type==='memo'?'memo-node':'gate')+(selectedIds.has(p.id)?' selected':'');el.style.left=p.x+'px';el.style.top=p.y+'px';el.dataset.id=p.id;
-        if(p.type==='input'){el.innerHTML=`<span class="name">입력 ${String.fromCharCode(65+p.id)}</span><button class="toggle ${p.value?'on':''}">${p.value}</button><span class="dot ${p.value?'hot':''}" data-pin="${p.id}:out:0"></span>`;el.querySelector('.toggle').onclick=e=>{e.stopPropagation();p.value=1-p.value;draw()}}
-        else if(p.type==='lamp'){el.innerHTML=`<span class="dot" data-pin="${p.id}:in:0"></span><span class="bulb ${value(p)?'on':''}"></span><b>출력 ${value(p)}</b>`}
-        else if(p.type==='memo'){el.innerHTML='<div class="memo-head">메모 · 잡고 이동</div>';const note=document.createElement('textarea');note.placeholder='메모를 입력하세요…';note.value=p.text||'';note.oninput=()=>p.text=note.value;el.append(note)}
-        else{const count=p.type==='NOT'?1:2;el.innerHTML=`<div class="gate-head"><strong>${p.type}</strong></div><div class="gate-body"><div class="pins">${Array.from({length:count},(_,i)=>`<span class="pin in"><i class="dot" data-pin="${p.id}:in:${i}"></i>${String.fromCharCode(65+i)}</span>`).join('')}</div><span class="symbol">${p.type==='AND'?'&':p.type==='OR'?'≥1':p.type==='XOR'?'=1':'¬'}</span><span class="pin out"><i class="dot hot" data-pin="${p.id}:out:0"></i></span></div>`}
-        const del=document.createElement('button');del.className='node-delete';del.type='button';del.title='삭제';del.textContent='×';del.onclick=e=>{e.stopPropagation();parts=parts.filter(q=>q.id!==p.id);links=links.filter(l=>l.from!==p.id&&l.to!==p.id);selectedIds.delete(p.id);if(selectedId===p.id)selectedId=[...selectedIds].at(-1)??null;draw()};el.append(del);
-        el.addEventListener('pointerdown',e=>{if(e.button===2)return;if(e.shiftKey){if(selectedIds.has(p.id))selectedIds.delete(p.id);else selectedIds.add(p.id)}else if(!selectedIds.has(p.id))selectedIds=new Set([p.id]);selectedId=p.id;world.querySelectorAll('.node').forEach(n=>n.classList.toggle('selected',selectedIds.has(+n.dataset.id)));if(e.shiftKey||e.button===1||e.target.closest('.dot,.toggle,button,textarea'))return;const q=worldPoint(e.clientX,e.clientY);drag={id:p.id,dx:q.x-p.x,dy:q.y-p.y,originX:p.x,originY:p.y,members:parts.filter(v=>selectedIds.has(v.id))};el.setPointerCapture(e.pointerId)});el.addEventListener('pointermove',e=>{if(!drag||drag.id!==p.id)return;const q=worldPoint(e.clientX,e.clientY),x=snap(q.x-drag.dx),y=snap(q.y-drag.dy),dx=x-drag.originX,dy=y-drag.originY;drag.members.forEach(v=>{v.x+=dx;v.y+=dy;const n=world.querySelector(`[data-id="${v.id}"]`);n.style.left=v.x+'px';n.style.top=v.y+'px'});drag.originX=x;drag.originY=y;drawWires()});el.addEventListener('pointerup',()=>drag=null);world.append(el);
-      });drawWires();board.querySelectorAll('.dot').forEach(d=>{d.onpointerdown=e=>{if(e.button===2)return;e.preventDefault();e.stopPropagation();const[id,side,index]=d.dataset.pin.split(':').map((v,i)=>i===0||i===2?+v:v);if(side==='out'){wireDrag={id,index};wirePoint={x:e.clientX,y:e.clientY};status.innerHTML='<b>연결 중</b> · 입력이 있는 오브젝트 위에 놓으세요.'}};d.ondblclick=e=>{e.preventDefault();e.stopPropagation();const[id,side,index]=d.dataset.pin.split(':').map((v,i)=>i===0||i===2?+v:v);const before=links.length;links=links.filter(l=>side==='out'?l.from!==id:!(l.to===id&&l.index===index));status.innerHTML=before===links.length?'<b>연결 없음</b> · 끊을 선이 없습니다.':'<b>연결 해제</b> · 포트에 연결된 선을 모두 끊었습니다.';wireDrag=null;wirePoint=null;draw()}})
-    }
-    function drawWires(){const path=(x1,y1,x2,y2,on,extra='')=>`<path class="wire ${on?'on':''} ${extra}" d="M${x1} ${y1} C${(x1+x2)/2} ${y1},${(x1+x2)/2} ${y2},${x2} ${y2}"/>`;const center=el=>{const r=el.getBoundingClientRect(),q=worldPoint(r.x+r.width/2,r.y+r.height/2);return q};wires.innerHTML=links.map(l=>{const a=pin(parts.find(p=>p.id===l.from),'out'),b=pin(parts.find(p=>p.id===l.to),'in',l.index);if(!a||!b)return'';const x=center(a),y=center(b);return path(x.x,x.y,y.x,y.y,value(parts.find(p=>p.id===l.from)))}).join('');if(wireDrag&&wirePoint){const a=pin(parts.find(p=>p.id===wireDrag.id),'out'),x=a&&center(a),y=worldPoint(wirePoint.x,wirePoint.y);if(x)wires.insertAdjacentHTML('beforeend',path(x.x,x.y,y.x,y.y,0,'preview'))}world.querySelectorAll('.lamp').forEach(el=>{const p=parts.find(q=>q.id===+el.dataset.id);el.querySelector('.bulb').classList.toggle('on',!!value(p));el.querySelector('b').textContent='출력 '+value(p)})}
-    function place(type,x,y){add(type,worldPoint(x,y).x,worldPoint(x,y).y);status.innerHTML='<b>부품 추가됨</b> · 타일에 맞춰 배치됩니다.'}
-    document.querySelectorAll('[data-add]').forEach(btn=>{btn.draggable=true;btn.onclick=()=>{const r=board.getBoundingClientRect();place(btn.dataset.add,r.left+r.width/2,r.top+r.height/2)};btn.ondragstart=e=>e.dataTransfer.setData('text/plain',btn.dataset.add)});
-    board.addEventListener('dragover',e=>e.preventDefault());board.addEventListener('drop',e=>{e.preventDefault();const type=e.dataTransfer.getData('text/plain');if(type)place(type,e.clientX,e.clientY)});
-    document.querySelector('#tile-size').oninput=e=>{tile=+e.target.value;document.querySelector('#tile-label').textContent=tile;parts.forEach(p=>{p.x=snap(p.x);p.y=snap(p.y)});camera();draw()};
-    document.querySelector('#reset').onclick=()=>{parts=[];links=[];selectedIds.clear();selectedId=null;nextId=0;status.innerHTML='<b>초기화됨</b> · 새 회로를 만들어보세요.';draw()};
-    board.addEventListener('pointerdown',e=>{if(e.shiftKey&&e.button===0){const r=board.getBoundingClientRect(),m=document.querySelector('#marquee');selectDrag={x:e.clientX,y:e.clientY,base:new Set(selectedIds)};m.style.display='block';m.style.left=`${e.clientX-r.left}px`;m.style.top=`${e.clientY-r.top}px`;m.style.width=m.style.height='0px';board.setPointerCapture(e.pointerId);e.preventDefault();return}if(!wireDrag&&(e.button===2||e.button===1||e.button===0&&!e.target.closest('.node'))){if(e.button===0){selectedId=null;selectedIds.clear();world.querySelectorAll('.node').forEach(n=>n.classList.remove('selected'))}panDrag={x:e.clientX,y:e.clientY,px:panX,py:panY};board.setPointerCapture(e.pointerId);e.preventDefault()}});board.addEventListener('contextmenu',e=>e.preventDefault());board.addEventListener('pointermove',e=>{if(panDrag){panX=panDrag.px+e.clientX-panDrag.x;panY=panDrag.py+e.clientY-panDrag.y;camera();drawWires();return}if(wireDrag){wirePoint={x:e.clientX,y:e.clientY};drawWires()}});board.addEventListener('pointerup',e=>{if(panDrag){panDrag=null;return}if(!wireDrag)return;let target=document.elementFromPoint(e.clientX,e.clientY)?.closest('.node');if(target&&!target.classList.contains('memo-node')){const id=+target.dataset.id,p=parts.find(q=>q.id===id);if(p&&p.id!==wireDrag.id&&p.type!=='input'){const inputs=[...target.querySelectorAll('[data-pin*="in"]')],pinEl=inputs.sort((a,b)=>Math.abs(a.getBoundingClientRect().y+a.offsetHeight/2-e.clientY)-Math.abs(b.getBoundingClientRect().y+b.offsetHeight/2-e.clientY))[0];if(pinEl){const[, ,index]=pinEl.dataset.pin.split(':');links=links.filter(l=>!(l.to===id&&l.index===+index));links.push({from:wireDrag.id,to:id,index:+index});status.innerHTML='<b>연결 완료</b> · 오브젝트에 자동 연결했습니다.'}else status.innerHTML='<b>연결되지 않음</b> · 입력이 있는 오브젝트를 선택하세요.'}else status.innerHTML='<b>연결되지 않음</b> · 입력이 있는 오브젝트를 선택하세요.'}else status.innerHTML='<b>연결되지 않음</b> · 입력 오브젝트 위에 놓으세요.';wireDrag=null;wirePoint=null;draw()});board.addEventListener('pointermove',e=>{if(!selectDrag)return;const r=board.getBoundingClientRect(),x1=Math.min(e.clientX,selectDrag.x),y1=Math.min(e.clientY,selectDrag.y),x2=Math.max(e.clientX,selectDrag.x),y2=Math.max(e.clientY,selectDrag.y),m=document.querySelector('#marquee');m.style.left=`${x1-r.left}px`;m.style.top=`${y1-r.top}px`;m.style.width=`${x2-x1}px`;m.style.height=`${y2-y1}px`;if(Math.abs(e.clientX-selectDrag.x)+Math.abs(e.clientY-selectDrag.y)>3){selectedIds=new Set(selectDrag.base);world.querySelectorAll('.node').forEach(n=>{const b=n.getBoundingClientRect();if(b.right>=x1&&b.left<=x2&&b.bottom>=y1&&b.top<=y2)selectedIds.add(+n.dataset.id);n.classList.toggle('selected',selectedIds.has(+n.dataset.id))});selectedId=[...selectedIds].at(-1)??null}});board.addEventListener('pointerup',()=>{if(selectDrag){selectDrag=null;document.querySelector('#marquee').style.display='none'}});board.addEventListener('wheel',e=>{e.preventDefault();const r=board.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top,at=worldPoint(e.clientX,e.clientY),next=Math.max(.25,Math.min(2.5,zoom*(e.deltaY<0?1.1:.9)));zoom=next;panX=x-at.x*zoom;panY=y-at.y*zoom;camera();drawWires()},{passive:false});document.querySelector('#theme').onclick=e=>{document.body.classList.toggle('light');e.currentTarget.textContent=document.body.classList.contains('light')?'다크 테마':'라이트 테마'};
-    function removeSelected(){if(!selectedIds.size)return;const ids=selectedIds;parts=parts.filter(p=>!ids.has(p.id));links=links.filter(l=>!ids.has(l.from)&&!ids.has(l.to));selectedIds=new Set();selectedId=null;draw()}
-    window.addEventListener('keydown',e=>{if(e.target.matches('textarea,input,[contenteditable="true"]'))return;const mod=e.ctrlKey||e.metaKey;if(mod&&e.key.toLowerCase()==='c'&&selectedIds.size){const ids=new Set(selectedIds);clipboard={parts:parts.filter(p=>ids.has(p.id)).map(p=>({...p})),links:links.filter(l=>ids.has(l.from)&&ids.has(l.to)).map(l=>({...l}))};e.preventDefault()}else if(mod&&e.key.toLowerCase()==='v'&&clipboard?.parts.length){const minX=Math.min(...clipboard.parts.map(p=>p.x)),minY=Math.min(...clipboard.parts.map(p=>p.y)),r=board.getBoundingClientRect(),center=worldPoint(r.left+r.width/2,r.top+r.height/2),deltaX=selectedIds.size?tile*2:center.x-minX,deltaY=selectedIds.size?tile*2:center.y-minY,map=new Map();clipboard.parts.forEach(p=>{const copy={...p,id:nextId++,x:snap(p.x+deltaX),y:snap(p.y+deltaY)};parts.push(copy);map.set(p.id,copy.id)});clipboard.links.forEach(l=>{if(map.has(l.from)&&map.has(l.to))links.push({from:map.get(l.from),to:map.get(l.to),index:l.index})});selectedIds=new Set(map.values());selectedId=[...selectedIds].at(-1)??null;draw();e.preventDefault()}else if(e.key==='Delete'||e.key==='Backspace'){removeSelected();e.preventDefault()}});
-    camera();const initial=board.getBoundingClientRect();panX=initial.width/2-50000;panY=initial.height/2-50000;camera();draw();
-  </script>
-</body>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>logic</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header>
+      <div class="brand">
+        <div class="logo">∧</div>
+        <div><strong>logic</strong></div>
+      </div>
+      <div>
+        <button class="reset" id="theme">라이트 테마</button>
+        <button class="reset" id="reset">회로 초기화</button>
+      </div>
+    </header>
+
+    <main>
+      <div class="layout">
+        <aside class="panel">
+          <h2>부품</h2>
+          <button class="tool" data-add="input">
+            <span class="icon">0 / 1</span>
+            <span><b>입력</b><small>신호 스위치</small></span>
+          </button>
+          <button class="tool" data-add="AND">
+            <span class="icon">&amp;</span>
+            <span><b>AND</b><small>그리고</small></span>
+          </button>
+          <button class="tool" data-add="OR">
+            <span class="icon">≥1</span>
+            <span><b>OR</b><small>또는</small></span>
+          </button>
+          <button class="tool" data-add="NOT">
+            <span class="icon">1</span>
+            <span><b>NOT</b><small>반전</small></span>
+          </button>
+          <button class="tool" data-add="XOR">
+            <span class="icon">=1</span>
+            <span><b>XOR</b><small>배타적 OR</small></span>
+          </button>
+          <button class="tool" data-add="lamp">
+            <span class="icon">●</span>
+            <span><b>램프</b><small>출력 표시</small></span>
+          </button>
+          <button class="tool" data-add="memo">
+            <span class="icon">✎</span>
+            <span><b>메모</b><small>주석</small></span>
+          </button>
+
+          <div class="rule"></div>
+          <label class="tile-control">
+            타일 크기 <b id="tile-label">24</b>px
+            <input id="tile-size" type="range" min="12" max="64" value="24">
+          </label>
+          <div class="help">
+            <b>사용법</b><br>
+            부품을 캔버스로 드래그<br>
+            Shift+클릭/드래그: 다중 선택<br>
+            선택한 부품 드래그: 함께 이동<br>
+            출력에서 오브젝트로 선 연결<br>
+            빈 곳을 드래그해 이동<br>
+            휠로 확대·축소<br>
+            포트 더블클릭으로 연결 해제
+          </div>
+        </aside>
+
+        <section class="board-wrap" id="viewport">
+          <div class="board" id="board">
+            <div class="marquee" id="marquee"></div>
+            <div class="world" id="world">
+              <svg class="wire-layer" id="wires" viewBox="0 0 100000 100000"></svg>
+              <div class="empty" id="empty">
+                <div><span>⌁</span>사이드바에서 부품을 꺼내<br>무한 캔버스에 놓아보세요</div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="status" id="status" aria-live="polite">
+        <b>준비됨</b> · 부품을 캔버스로 끌어 놓으세요. 출력선을 오브젝트 위에 놓으면 자동 연결됩니다.
+      </div>
+    </main>
+
+    <script src="src/circuit-core.js"></script>
+    <script src="src/renderer.js"></script>
+  </body>
 </html>

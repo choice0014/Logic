@@ -16,7 +16,7 @@
     "appId": "com.logic.desktop",
     "productName": "logic",
     "directories": { "output": "dist" },
-    "files": ["index.html", "main.cjs", "logic-cli.cjs", "package.json"],
+    "files": ["index.html", "styles.css", "main.cjs", "logic-cli.cjs", "src/**/*", "package.json"],
     "linux": { "target": ["AppImage", "deb"], "category": "Education" },
     "win": { "target": ["nsis", "zip"] },
     "mac": { "target": ["dmg", "zip"], "category": "public.app-category.education" }
