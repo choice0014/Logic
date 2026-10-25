@@ -18,7 +18,23 @@ npm run dist:win    # NSIS 설치 파일, zip
 npm run dist:mac    # dmg, zip
 ```
 
-Linux 앱은 현재 Linux 환경 호환을 위해 Chromium sandbox 없이 시작합니다. Windows/macOS 빌드는 이 설정을 사용하지 않습니다. `.github/workflows/build.yml`은 각 OS의 runner에서 빌드하며, `v*` 태그를 push하거나 GitHub Actions에서 수동 실행한 뒤 Artifacts에서 다운로드할 수 있습니다.
+각 OS에서 저장소를 내려받고 해당 OS에서 직접 빌드합니다. Linux용은 Linux에서, Windows용은 Windows에서, macOS용은 macOS에서 실행하세요.
+
+```sh
+git clone https://github.com/choice0014/Logic.git
+cd Logic
+npm install
+```
+
+대상 OS에 맞춰 하나를 실행하면 결과물이 `dist/`에 생성됩니다.
+
+```sh
+npm run dist:linux  # Linux: AppImage, deb
+npm run dist:win    # Windows: NSIS 설치 파일, zip
+npm run dist:mac    # macOS: dmg, zip
+```
+
+Linux 앱은 현재 환경 호환을 위해 Chromium sandbox 없이 시작합니다.
 
 Windows/macOS 코드 서명 인증서는 설정하지 않았습니다. 따라서 해당 OS에서 첫 실행 시 보안 확인이 표시될 수 있습니다.
 
